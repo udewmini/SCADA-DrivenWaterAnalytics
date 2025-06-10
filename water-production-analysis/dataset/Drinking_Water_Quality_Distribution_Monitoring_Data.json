@@ -1,0 +1,64 @@
+{
+	"name": "Drinking_Water_Quality_Distribution_Monitoring_Data",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BlobStorageWaterProduction",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "Drinking_Water_Quality_Distribution_Monitoring_Data_20250609.csv",
+				"container": "waterquality"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Sample Number",
+				"type": "String"
+			},
+			{
+				"name": "Sample Date",
+				"type": "String"
+			},
+			{
+				"name": "Sample Time",
+				"type": "String"
+			},
+			{
+				"name": "Sample Site",
+				"type": "String"
+			},
+			{
+				"name": "Sample class",
+				"type": "String"
+			},
+			{
+				"name": "Residual Free Chlorine (mg/L)",
+				"type": "String"
+			},
+			{
+				"name": "Turbidity (NTU)",
+				"type": "String"
+			},
+			{
+				"name": "Fluoride (mg/L)",
+				"type": "String"
+			},
+			{
+				"name": "Coliform (Quanti-Tray) (MPN /100mL)",
+				"type": "String"
+			},
+			{
+				"name": "E.coli(Quanti-Tray) (MPN/100mL)",
+				"type": "String"
+			}
+		]
+	}
+}
