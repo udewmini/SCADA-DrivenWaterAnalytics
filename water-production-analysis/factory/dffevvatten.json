@@ -1,0 +1,9 @@
+{
+	"name": "dffevvatten",
+	"location": "northeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "932a022a-b15b-411b-a7c0-f19e97727744",
+		"tenantId": "81210fa4-862d-4076-8aaf-e504b2cdd263"
+	}
+}
