@@ -1,0 +1,405 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "dffevvatten"
+		},
+		"BlobStorageWaterProduction_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'BlobStorageWaterProduction'"
+		},
+		"DataLakeWaterProduction_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'DataLakeWaterProduction'"
+		},
+		"DataLakeWaterProduction_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://waterproductiondata.dfs.core.windows.net/"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/GetWaterProductionDatatoDataLake')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "CopyWaterQualityMonitoringData",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Drinking_Water_Quality_Distribution_Monitoring_Data",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "wpdataset1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					},
+					{
+						"name": "CopySyntheticData",
+						"type": "Copy",
+						"dependsOn": [
+							{
+								"activity": "CopyWaterQualityMonitoringData",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobStorageReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"sink": {
+								"type": "ParquetSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "MergeFiles"
+								},
+								"formatSettings": {
+									"type": "ParquetWriteSettings"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "SyntheticData",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "wpdataset2",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/Drinking_Water_Quality_Distribution_Monitoring_Data')]",
+				"[concat(variables('factoryId'), '/datasets/wpdataset1')]",
+				"[concat(variables('factoryId'), '/datasets/SyntheticData')]",
+				"[concat(variables('factoryId'), '/datasets/wpdataset2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Drinking_Water_Quality_Distribution_Monitoring_Data')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "BlobStorageWaterProduction",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "Drinking_Water_Quality_Distribution_Monitoring_Data_20250609.csv",
+						"container": "waterquality"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Sample Number",
+						"type": "String"
+					},
+					{
+						"name": "Sample Date",
+						"type": "String"
+					},
+					{
+						"name": "Sample Time",
+						"type": "String"
+					},
+					{
+						"name": "Sample Site",
+						"type": "String"
+					},
+					{
+						"name": "Sample class",
+						"type": "String"
+					},
+					{
+						"name": "Residual Free Chlorine (mg/L)",
+						"type": "String"
+					},
+					{
+						"name": "Turbidity (NTU)",
+						"type": "String"
+					},
+					{
+						"name": "Fluoride (mg/L)",
+						"type": "String"
+					},
+					{
+						"name": "Coliform (Quanti-Tray) (MPN /100mL)",
+						"type": "String"
+					},
+					{
+						"name": "E.coli(Quanti-Tray) (MPN/100mL)",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/BlobStorageWaterProduction')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/BlobStorageWaterProduction')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('BlobStorageWaterProduction_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DataLakeWaterProduction')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('DataLakeWaterProduction_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('DataLakeWaterProduction_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/wpdataset1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataLakeWaterProduction",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DataLakeWaterProduction')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/SyntheticData')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "BlobStorageWaterProduction",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "synthetic_water_quality_200k_after_2017.csv",
+						"container": "waterquality"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "Sample Number",
+						"type": "String"
+					},
+					{
+						"name": "Sample Date",
+						"type": "String"
+					},
+					{
+						"name": "Sample Time",
+						"type": "String"
+					},
+					{
+						"name": "Sample Site",
+						"type": "String"
+					},
+					{
+						"name": "Sample Class",
+						"type": "String"
+					},
+					{
+						"name": "Residual Free Chlorine (mg/L)",
+						"type": "String"
+					},
+					{
+						"name": "Turbidity (NTU)",
+						"type": "String"
+					},
+					{
+						"name": "Fluoride (mg/L)",
+						"type": "String"
+					},
+					{
+						"name": "Coliform (MPN/100mL)",
+						"type": "String"
+					},
+					{
+						"name": "E.coli (MPN/100mL)",
+						"type": "String"
+					},
+					{
+						"name": "Region",
+						"type": "String"
+					},
+					{
+						"name": "Operator ID",
+						"type": "String"
+					},
+					{
+						"name": "Sample Source",
+						"type": "String"
+					},
+					{
+						"name": "Sampling Method",
+						"type": "String"
+					},
+					{
+						"name": "Failure Type",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/BlobStorageWaterProduction')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/wpdataset2')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "DataLakeWaterProduction",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation"
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/DataLakeWaterProduction')]"
+			]
+		}
+	]
+}
