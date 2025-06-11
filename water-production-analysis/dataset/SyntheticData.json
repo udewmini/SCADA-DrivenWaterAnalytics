@@ -1,0 +1,84 @@
+{
+	"name": "SyntheticData",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BlobStorageWaterProduction",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "synthetic_water_quality_200k_after_2017.csv",
+				"container": "waterquality"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Sample Number",
+				"type": "String"
+			},
+			{
+				"name": "Sample Date",
+				"type": "String"
+			},
+			{
+				"name": "Sample Time",
+				"type": "String"
+			},
+			{
+				"name": "Sample Site",
+				"type": "String"
+			},
+			{
+				"name": "Sample Class",
+				"type": "String"
+			},
+			{
+				"name": "Residual Free Chlorine (mg/L)",
+				"type": "String"
+			},
+			{
+				"name": "Turbidity (NTU)",
+				"type": "String"
+			},
+			{
+				"name": "Fluoride (mg/L)",
+				"type": "String"
+			},
+			{
+				"name": "Coliform (MPN/100mL)",
+				"type": "String"
+			},
+			{
+				"name": "E.coli (MPN/100mL)",
+				"type": "String"
+			},
+			{
+				"name": "Region",
+				"type": "String"
+			},
+			{
+				"name": "Operator ID",
+				"type": "String"
+			},
+			{
+				"name": "Sample Source",
+				"type": "String"
+			},
+			{
+				"name": "Sampling Method",
+				"type": "String"
+			},
+			{
+				"name": "Failure Type",
+				"type": "String"
+			}
+		]
+	}
+}
