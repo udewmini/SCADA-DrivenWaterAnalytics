@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "synthetic_water_quality_200k_after_2017.csv",
+				"fileName": "synthetic_water_quality_2010_2014.csv",
 				"container": "waterquality"
 			},
 			"columnDelimiter": ",",
