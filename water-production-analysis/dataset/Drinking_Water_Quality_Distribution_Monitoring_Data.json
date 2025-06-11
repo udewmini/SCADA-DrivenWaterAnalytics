@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "Drinking_Water_Quality_Distribution_Monitoring_Data_20250609.csv",
+				"fileName": "cleaned_Water_Data_Archive.csv",
 				"container": "waterquality"
 			},
 			"columnDelimiter": ",",
