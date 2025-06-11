@@ -1,0 +1,33 @@
+{
+	"name": "SampleSitesData",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "BlobStorageWaterProduction",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "SP2020 w XY coordinates",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "OpenData_Distribution_Water_Quality_Sampling_Sites_Updated_2021-0618.xlsx",
+				"container": "waterquality"
+			}
+		},
+		"schema": [
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			}
+		]
+	}
+}

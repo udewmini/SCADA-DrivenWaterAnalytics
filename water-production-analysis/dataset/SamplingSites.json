@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
-				"fileName": "OpenData_Distribution_Water_Quality_Sampling_Sites_Updated_2021-0618.xlsx",
+				"fileName": "OpenData_DataDictionary_DWQO_Distribution_Chem-Micro_20210622.xlsx",
 				"container": "waterquality"
 			},
 			"columnDelimiter": "",
