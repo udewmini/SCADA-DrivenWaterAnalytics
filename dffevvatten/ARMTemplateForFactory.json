@@ -503,7 +503,10 @@
 				"type": "Parquet",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobFSLocation"
+						"type": "AzureBlobFSLocation",
+						"fileName": "synthetic_Water_Data_Archive.parquet",
+						"folderPath": "collection",
+						"fileSystem": "output"
 					},
 					"compressionCodec": "snappy"
 				},
@@ -526,7 +529,10 @@
 				"type": "Parquet",
 				"typeProperties": {
 					"location": {
-						"type": "AzureBlobFSLocation"
+						"type": "AzureBlobFSLocation",
+						"fileName": "sample_site_data.parquet",
+						"folderPath": "collection",
+						"fileSystem": "output"
 					},
 					"compressionCodec": "snappy"
 				},
