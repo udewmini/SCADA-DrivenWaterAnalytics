@@ -17,7 +17,7 @@
 		},
 		"DataLakeWaterProduction_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://waterproductiondata.dfs.core.windows.net/"
+			"defaultValue": "https://datalakewaterproduction.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"type": "string",

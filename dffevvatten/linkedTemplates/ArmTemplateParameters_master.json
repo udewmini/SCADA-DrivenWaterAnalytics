@@ -12,7 +12,7 @@
 			"value": ""
 		},
 		"DataLakeWaterProduction_properties_typeProperties_url": {
-			"value": "https://waterproductiondata.dfs.core.windows.net/"
+			"value": "https://datalakewaterproduction.dfs.core.windows.net/"
 		},
 		"containerUri": {
 			"value": ""
