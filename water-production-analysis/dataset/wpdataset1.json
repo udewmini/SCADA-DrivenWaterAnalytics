@@ -9,7 +9,10 @@
 		"type": "Parquet",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation"
+				"type": "AzureBlobFSLocation",
+				"fileName": "cleaned_Water_Data_Archive.parquet",
+				"folderPath": "collection",
+				"fileSystem": "output"
 			},
 			"compressionCodec": "snappy"
 		},
